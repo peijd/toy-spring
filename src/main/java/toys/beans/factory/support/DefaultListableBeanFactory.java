@@ -1,6 +1,4 @@
-package toys.beans.config;
-
-import javax.jws.Oneway;
+package toys.beans.factory.support;
 
 /**
  * (       "     )
@@ -20,6 +18,7 @@ import javax.jws.Oneway;
  * \    (. ) ,   /  /__I_____\
  * snd  '._/_)_(\__.'   (__,(__,_]
  * <o>
+ * |   愿你被这个世界温柔以待。
  * / \
  *
  * @author peijundong@gmail.com
@@ -27,14 +26,6 @@ import javax.jws.Oneway;
  * Description:
  * Copyright(©) 2018 by peijundong
  */
-public class BeanDefinition {
-    private Object bean;
+public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory{
 
-    public BeanDefinition(Object bean) {
-        this.bean = bean;
-    }
-
-    public Object getBean(){
-        return  bean;
-    }
 }

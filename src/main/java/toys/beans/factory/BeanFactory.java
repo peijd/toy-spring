@@ -1,4 +1,6 @@
-package toys.beans.config;
+package toys.beans.factory;
+
+import toys.beans.factory.config.BeanDefinition;
 
 /**
  * (       "     )
@@ -26,9 +28,10 @@ package toys.beans.config;
  * Description:
  * Copyright(©) 2018 by peijundong
  */
-public class TestBean {
-    private  final static String HELLO = "hello";
-    public  String getHello(){
-        return  HELLO;
-    }
+public interface BeanFactory {
+
+    Object getBean(String name);
+
+    void registerBeanDefinition(String name, BeanDefinition beanDefinition);
+
 }

@@ -1,6 +1,9 @@
-package toys.beans.config;
+package toys.beans.factory.config;
 
 import org.junit.Test;
+import toys.beans.factory.BeanFactory;
+import toys.beans.factory.support.DefaultListableBeanFactory;
+
 import static org.junit.Assert.*;
 /**
  * (       "     )
@@ -33,14 +36,12 @@ public class BeanFactoryTest {
     @Test
     public  void testBeanFactory(){
 
-        BeanFactory beanFactory = new BeanFactory();
-
-        TestBean  testBean = new TestBean();
-
-        BeanDefinition  beanDefinition = new BeanDefinition(testBean);
+        BeanFactory beanFactory = new DefaultListableBeanFactory();
 
 
-        beanFactory.registerBeanDefinition("testBean",  beanDefinition);
+        BeanDefinition  beanDefinition = new BeanDefinition();
+        beanDefinition.setBeanClassName("toys.beans.factory.config.TestBean");
+        beanFactory.registerBeanDefinition("testBean", beanDefinition);
 
         TestBean test = (TestBean) beanFactory.getBean("testBean");
 

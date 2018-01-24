@@ -1,7 +1,4 @@
-package toys.beans.config;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+package toys.beans.factory.config;
 
 /**
  * (       "     )
@@ -21,23 +18,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * \    (. ) ,   /  /__I_____\
  * snd  '._/_)_(\__.'   (__,(__,_]
  * <o>
- * |    努力为更多人带来更好的教育。
+ * |   愿你被这个世界温柔以待。
  * / \
  *
  * @author peijundong@gmail.com
  * Created by peijundong on 2018/1/24。
  * Description:
- * Copyright(©) 2018 by brain-j
+ * Copyright(©) 2018 by peijundong
  */
-public class BeanFactory {
-
-    private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(8);
-
-    Object getBean(String name) {
-        return beanDefinitionMap.get(name).getBean();
-    }
-
-    public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition){
-        beanDefinitionMap.put(beanName, beanDefinition);
+public class TestBean {
+    private  final static String HELLO = "hello";
+    public  String getHello(){
+        return  HELLO;
     }
 }
