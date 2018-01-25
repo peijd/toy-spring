@@ -1,10 +1,9 @@
 package toys.beans.factory.support;
 
-import toys.beans.factory.BeanFactory;
-import toys.beans.factory.config.BeanDefinition;
+import java.lang.reflect.Field;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import toys.beans.PropertyValue;
+import toys.beans.factory.config.BeanDefinition;
 
 /**
  * (       "     )
@@ -35,7 +34,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
 
     @Override
-    protected Object doCreateBean(BeanDefinition beanDefinition) {
+    protected Object doCreateBean(BeanDefinition beanDefinition) throws Exception {
+    	Object bean = createBeanInstance(beanDefinition);
+    	applyPropertyValues(bean, beanDefinition);
+    	return bean;
+    }
+    
+    protected Object createBeanInstance(BeanDefinition beanDefinition) {
         // TODO interface throw exception
         if (!beanDefinition.getBeanClass().isInterface()){
             try {
@@ -48,4 +53,15 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
         return null;
     }
+    
+    // spring not use this method
+    protected void applyPropertyValues(Object bean, BeanDefinition mbd) throws Exception {
+    	for (PropertyValue propertyValue : mbd.getPropertyValues().getPropertyValues()) {
+			Field declaredField = bean.getClass().getDeclaredField(propertyValue.getName());
+			declaredField.setAccessible(true);
+			declaredField.set(bean, propertyValue.getValue());
+		}
+    }
+    
+    
 }

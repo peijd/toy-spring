@@ -2,6 +2,9 @@ package toys.beans.factory.config;
 
 import javax.jws.Oneway;
 
+import toys.beans.PropertyValue;
+import toys.beans.PropertyValues;
+
 /**
  * (       "     )
  * ( _  *
@@ -33,6 +36,8 @@ public class BeanDefinition {
     private Class beanClass;
 
     private String beanClassName;
+    
+    private PropertyValues propertyValues;
 
     public BeanDefinition(Object bean) {
         this.bean = bean;
@@ -73,4 +78,14 @@ public class BeanDefinition {
             e.printStackTrace();
         }
     }
+
+	public PropertyValues getPropertyValues() {
+		return propertyValues;
+	}
+
+	public void setPropertyValues(PropertyValues propertyValues) {
+		this.propertyValues = propertyValues;
+	}
+
+    
 }

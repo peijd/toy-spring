@@ -27,8 +27,14 @@ package toys.beans.factory.config;
  * Copyright(©) 2018 by peijundong
  */
 public class TestBean {
-    private  final static String HELLO = "hello";
-    public  String getHello(){
-        return  HELLO;
+    private String text;
+    public String getHello(){
+        return  text;
     }
+    
+	public void setText(String text) {
+		this.text = text;
+	}
+    
+    
 }

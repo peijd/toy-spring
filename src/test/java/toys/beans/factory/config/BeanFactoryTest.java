@@ -1,10 +1,13 @@
 package toys.beans.factory.config;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
+
+import toys.beans.PropertyValue;
+import toys.beans.PropertyValues;
 import toys.beans.factory.BeanFactory;
 import toys.beans.factory.support.DefaultListableBeanFactory;
-
-import static org.junit.Assert.*;
 /**
  * (       "     )
  * ( _  *
@@ -34,14 +37,21 @@ import static org.junit.Assert.*;
 public class BeanFactoryTest {
 
     @Test
-    public  void testBeanFactory(){
+    public  void testBeanFactory() throws Exception{
 
         BeanFactory beanFactory = new DefaultListableBeanFactory();
 
 
         BeanDefinition  beanDefinition = new BeanDefinition();
         beanDefinition.setBeanClassName("toys.beans.factory.config.TestBean");
+        
+		PropertyValues propertyValues = new PropertyValues();
+		propertyValues.addPropertyValue(new PropertyValue("text", "hello"));
+        beanDefinition.setPropertyValues(propertyValues);
+        
         beanFactory.registerBeanDefinition("testBean", beanDefinition);
+        
+
 
         TestBean test = (TestBean) beanFactory.getBean("testBean");
 
