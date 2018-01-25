@@ -1,4 +1,7 @@
-package toys.beans.factory.support;
+package toys.beans.xml;
+
+import toys.beans.factory.support.DefaultListableBeanFactory;
+import toys.beans.io.Resource;
 
 /**
  * (       "     )
@@ -22,10 +25,17 @@ package toys.beans.factory.support;
  * / \
  *
  * @author peijundong@gmail.com
- * Created by peijundong on 2018/1/24。
+ * Created by peijundong on 2018/1/25。
  * Description:
  * Copyright(©) 2018 by peijundong
  */
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory {
+public class XmlBeanFactory extends DefaultListableBeanFactory{
+
+    private final XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this);
+
+
+    public XmlBeanFactory(Resource resource) throws Exception {
+        this.reader.loadBeanDefinitions(resource);
+    }
 
 }

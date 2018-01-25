@@ -1,4 +1,9 @@
-package toys.beans.factory.support;
+package toys.beans.io;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * (       "     )
@@ -22,10 +27,22 @@ package toys.beans.factory.support;
  * / \
  *
  * @author peijundong@gmail.com
- * Created by peijundong on 2018/1/24。
+ * Created by peijundong on 2018/1/25。
  * Description:
  * Copyright(©) 2018 by peijundong
  */
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory {
+public class UrlResource implements Resource{
 
+    private URL url;
+
+    public UrlResource(URL url) {
+        this.url = url;
+    }
+
+    @Override
+    public InputStream getInputStream() throws IOException {
+        URLConnection connection = url.openConnection();
+        connection.connect();
+        return connection.getInputStream();
+    }
 }

@@ -1,4 +1,7 @@
-package toys.beans.factory.support;
+package toys.beans.io;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * (       "     )
@@ -22,10 +25,11 @@ package toys.beans.factory.support;
  * / \
  *
  * @author peijundong@gmail.com
- * Created by peijundong on 2018/1/24。
+ * Created by peijundong on 2018/1/25。
  * Description:
  * Copyright(©) 2018 by peijundong
  */
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory {
+public interface Resource {
 
+    InputStream getInputStream() throws IOException;
 }

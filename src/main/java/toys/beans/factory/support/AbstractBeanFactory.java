@@ -32,15 +32,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * Description:
  * Copyright(©) 2018 by peijundong
  */
-public abstract class AbstractBeanFactory implements BeanFactory{
+public abstract class AbstractBeanFactory implements BeanDefinitionRegistry, BeanFactory {
 
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(8);
 
+    // BeanFactory
     @Override
     public Object getBean(String name) {
         return beanDefinitionMap.get(name).getBean();
     }
 
+    // BeanDefinitionRegistry
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) throws Exception{
         Object bean = doCreateBean(beanDefinition);
@@ -48,5 +50,6 @@ public abstract class AbstractBeanFactory implements BeanFactory{
         beanDefinitionMap.put(beanName, beanDefinition);
     }
 
+    // sub class implement
     protected abstract Object doCreateBean(final BeanDefinition beanDefinition) throws Exception;
 }

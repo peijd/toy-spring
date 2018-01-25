@@ -8,6 +8,12 @@ import toys.beans.PropertyValue;
 import toys.beans.PropertyValues;
 import toys.beans.factory.BeanFactory;
 import toys.beans.factory.support.DefaultListableBeanFactory;
+import toys.beans.io.ClassPathResource;
+import toys.beans.io.UrlResource;
+import toys.beans.xml.XmlBeanFactory;
+
+import java.io.InputStream;
+
 /**
  * (       "     )
  * ( _  *
@@ -39,21 +45,30 @@ public class BeanFactoryTest {
     @Test
     public  void testBeanFactory() throws Exception{
 
-        BeanFactory beanFactory = new DefaultListableBeanFactory();
+//        BeanFactory beanFactory = new DefaultListableBeanFactory();
+//
+//
+//        BeanDefinition  beanDefinition = new BeanDefinition();
+//        beanDefinition.setBeanClassName("toys.beans.factory.config.TestBean");
+//
+//		PropertyValues propertyValues = new PropertyValues();
+//		propertyValues.addPropertyValue(new PropertyValue("text", "hello"));
+//        beanDefinition.setPropertyValues(propertyValues);
+//
+//        beanFactory.registerBeanDefinition("testBean", beanDefinition);
+//
+//
+//
+//        TestBean test = (TestBean) beanFactory.getBean("testBean");
 
+        InputStream stream = Test.class.getResourceAsStream("/test.xml");
+        System.out.println(stream != null);
+        stream = Test.class.getClassLoader().getResourceAsStream("test.xml");
+        System.out.println(stream != null);
 
-        BeanDefinition  beanDefinition = new BeanDefinition();
-        beanDefinition.setBeanClassName("toys.beans.factory.config.TestBean");
-        
-		PropertyValues propertyValues = new PropertyValues();
-		propertyValues.addPropertyValue(new PropertyValue("text", "hello"));
-        beanDefinition.setPropertyValues(propertyValues);
-        
-        beanFactory.registerBeanDefinition("testBean", beanDefinition);
-        
+        BeanFactory bf = new XmlBeanFactory(new ClassPathResource("text.xml"));
 
-
-        TestBean test = (TestBean) beanFactory.getBean("testBean");
+        TestBean test = (TestBean) bf.getBean("test");
 
 
         assertEquals("hello", test.getHello());
