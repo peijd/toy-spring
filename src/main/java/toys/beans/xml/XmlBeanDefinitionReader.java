@@ -6,6 +6,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import toys.beans.PropertyValue;
 import toys.beans.factory.config.BeanDefinition;
+import toys.beans.factory.config.BeanReference;
 import toys.beans.factory.support.AbstractBeanDefinitionReader;
 import toys.beans.factory.support.BeanDefinitionRegistry;
 import toys.beans.io.Resource;
@@ -95,8 +96,19 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 Element propertyEle = (Element) node;
                 String name = propertyEle.getAttribute("name");
                 String value = propertyEle.getAttribute("value");
-                beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, value));
-            }
+                if (value != null && value.length() > 0) {
+                    beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, value));
+                } else {
+                    String ref = propertyEle.getAttribute("ref");
+                    if (ref == null || ref.length() == 0){
+                        throw  new IllegalArgumentException("prpperty must specify a ref or value");
+                    }
+                    BeanReference bf = new BeanReference(ref);
+                    beanDefinition.getPropertyValues().addPropertyValue(new PropertyValue(name, bf));
+
+                }
+
+                }
         }
     }
 }

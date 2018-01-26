@@ -61,17 +61,20 @@ public class BeanFactoryTest {
 //
 //        TestBean test = (TestBean) beanFactory.getBean("testBean");
 
-        InputStream stream = Test.class.getResourceAsStream("/test.xml");
-        System.out.println(stream != null);
-        stream = Test.class.getClassLoader().getResourceAsStream("test.xml");
-        System.out.println(stream != null);
+//        InputStream stream = Test.class.getResourceAsStream("/test.xml");
+//        System.out.println(stream != null);
+//        stream = Test.class.getClassLoader().getResourceAsStream("test.xml");
+//        System.out.println(stream != null);
+
+//        InputStream stream = new ClassPathResource("test.xml").getInputStream();
+//
+//        System.out.println(stream != null);
 
         BeanFactory bf = new XmlBeanFactory(new ClassPathResource("text.xml"));
 
-        TestBean test = (TestBean) bf.getBean("test");
+        TestBean test = (TestBean) bf.getBean("testBean");
 
-
-        assertEquals("hello", test.getHello());
+        assertEquals("water", test.getTestProperty().getPropertyStr());
     }
 
 }

@@ -5,6 +5,8 @@ import javax.jws.Oneway;
 import toys.beans.PropertyValue;
 import toys.beans.PropertyValues;
 
+import java.util.ArrayList;
+
 /**
  * (       "     )
  * ( _  *
@@ -37,7 +39,7 @@ public class BeanDefinition {
 
     private String beanClassName;
     
-    private PropertyValues propertyValues;
+    private PropertyValues propertyValues = new PropertyValues();
 
     public BeanDefinition(Object bean) {
         this.bean = bean;

@@ -28,6 +28,9 @@ package toys.beans.factory.config;
  */
 public class TestBean {
     private String text;
+
+    private  PropertyTestBean testProperty;
+
     public String getHello(){
         return  text;
     }
@@ -35,6 +38,12 @@ public class TestBean {
 	public void setText(String text) {
 		this.text = text;
 	}
-    
-    
+
+    public PropertyTestBean getTestProperty() {
+        return testProperty;
+    }
+
+    public void setTestProperty(PropertyTestBean testProperty) {
+        this.testProperty = testProperty;
+    }
 }

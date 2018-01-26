@@ -41,6 +41,11 @@ public class ClassPathResource implements Resource{
 
     @Override
     public InputStream getInputStream() throws IOException {
-        return ClassPathResource.class.getClassLoader().getResourceAsStream(this.path);
+//        InputStream inputStream = ClassPathResource.class.getResourceAsStream(this.path);
+//        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = getClass().getClassLoader();
+        URLConnection urlConnection = classLoader.getResource("test.xml").openConnection();
+        urlConnection.connect();
+        return urlConnection.getInputStream();
     }
 }

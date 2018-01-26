@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 import toys.beans.PropertyValue;
 import toys.beans.factory.config.BeanDefinition;
+import toys.beans.factory.config.BeanReference;
 
 /**
  * (       "     )
@@ -59,7 +60,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     	for (PropertyValue propertyValue : mbd.getPropertyValues().getPropertyValues()) {
 			Field declaredField = bean.getClass().getDeclaredField(propertyValue.getName());
 			declaredField.setAccessible(true);
-			declaredField.set(bean, propertyValue.getValue());
+			Object value = propertyValue.getValue();
+			if (value instanceof BeanReference){
+			    BeanReference  bf = (BeanReference) value;
+                value = getBean(bf.getBeanName());
+            }
+			declaredField.set(bean, value);
 		}
     }
     
