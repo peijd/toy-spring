@@ -1,0 +1,132 @@
+
+* Spring从入门到放弃:装配Bean
+
+
+本来想写一个玩具式Spring微小框架，一边读Spring源代码，一边写。但感觉有点乱。
+
+然后就打算先总结一下，然后再看再写。最后希望实现一个完整的微小的框架。
+
+如果有一天这个系列不更新了，可能是我真的放弃了。
+
+** Spring配置的可选方案
+   - 在XML中显示的配置
+   - 在Java中进行显示的配置
+   - 隐式的bean发现机制和自动装配
+
+*** 自动化装配bean
+    Spring从以下两个角度实现自动化装配：
+    - 组件扫描： Spring会自动发现应用上下中所创建的bean。
+    - 自动装配： Spring自动满足bean之间的依赖。
+**** 创建bean
+#+BEGIN_SRC java
+@Component
+public class JavaGenerateService implements GenerateService {
+    @Override
+    public String generateCode() {
+        return "Java code";
+    }
+} 
+#+END_SRC
+          
+**** 声明bean
+#+BEGIN_SRC java
+@Component("rubvGen")
+//@Named("rubyGen")
+public class RubyGenerateService implements GenerateService{
+    @Override
+    public String generateCode() {
+        return "Ruby code";
+    }
+}
+#+END_SRC
+
+**** 设置组件扫描
+#+BEGIN_SRC java
+// 指定包
+@ComponentScan(basePackages = {"spring.beans.autowiring"})
+// 指定类所在的包
+@ComponentScan(basePackageClasses = {GenerateConfig.class})
+#+END_SRC
+
+**** bean的自动装配
+#+BEGIN_SRC java
+// spring 自己的注解 
+@Autowired
+private GenerateService javaGenerateService;
+
+// Java的依赖注入规范
+@Inject
+private GenerateService haskellGenerateService;
+#+END_SRC
+**** 测试
+#+BEGIN_SRC 
+//在测试类的上面添加下面注解就可以了，会帮你加载Spring的配置，初始化容器
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = GenerateConfig.class)
+#+END_SRC
+*** 通过Java代码装配bean
+**** 创建配置类
+#+BEGIN_SRC java
+@Configuration
+public class JavaCongfig {
+
+。。。。
+
+}
+#+END_SRC
+**** 声明的bean
+#+BEGIN_SRC java
+    @Bean(name = "PythonGen")
+    public PythonGenerateService  pythonGenerateService(){
+        return  new PythonGenerateService();
+    }
+#+END_SRC
+
+**** 借住JavaConfig实现注入
+#+BEGIN_SRC java
+    //需要注意的是： 虽然调用的是pythonGenerateService，默认情况下，Spring是不会创建新的实例的。
+    @Bean(name = "PythonGenAdv")
+    public  PuthonGenerateAdvanceServcie puthonGenerateAdvanceServcie(){
+        return  new PuthonGenerateAdvanceServcie(pythonGenerateService());
+    }
+
+    @Bean(name = "PythonGenAdv2")
+    public  PuthonGenerateAdvanceServcie puthonGenerateAdvanceServcie2(PythonGenerateService pythonGenerateService){
+        return  new PuthonGenerateAdvanceServcie(pythonGenerateService);
+    }
+#+END_SRC
+
+**** 测试 
+#+BEGIN_SRC java
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes=JavaCongfig.class, loader=AnnotationConfigContextLoader.class)
+public class PythonGeneraterTest {
+
+    @Autowired
+    private PythonGenerateService  pythonGenerateService;
+
+    @Autowired
+    @Qualifier("PythonGenAdv")
+    private PuthonGenerateAdvanceServcie  pythonGenerateAdvanceService;
+
+    @Autowired
+    @Qualifier("PythonGenAdv2")
+    private PuthonGenerateAdvanceServcie  pythonGenerateAdvanceService2;
+
+    @Test
+    public void testGenerater(){
+        Assert.assertEquals("Python code",pythonGenerateService.generateCode());
+
+        Assert.assertEquals(pythonGenerateAdvanceService.getPythonGenerateService(),
+                pythonGenerateAdvanceService2.getPythonGenerateService());
+    }
+}
+#+END_SRC
+*** 通过XML装配bean
+**** 创建XML配置规范
+
+**** 声明一个bean
+**** 借助构造器注入初始化bean
+**** 设置属性
+*** 导入和混合配置
+**    

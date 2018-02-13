@@ -11,4 +11,7 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.springframework', name: 'spring-test', version: '5.0.3.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context', version: '5.0.3.RELEASE'
+    compile group: 'javax.inject', name: 'javax.inject', version: '1'
 }
