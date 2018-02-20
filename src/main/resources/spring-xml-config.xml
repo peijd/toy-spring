@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns="http://www.springframework.org/schema/c"
+       xmlns="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <!-- more bean definitions go here -->
+    <bean class="spring.beans.xml.ClojureGenerateService"></bean>
+    
+    
+    <bean name="xmlConfig" class="spring.beans.xml.XMLConfig">
+        <property name="xmlPath" value="xml path" />
+    </bean>
+    
+    <bean name="C" class="spring.beans.xml.XMLSettingConfigGenerateService">
+        <constructor-arg value="C" />
+        <property name="sayAfterLang" value="test" />
+    </bean>
+    
+    <bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+        <constructor-arg value="C++" />
+        <constructor-arg ref="xmlConfig" />
+        <property name="sayAfterLang" value="test" />
+    </bean>
+    
+    <!--c:xxx-ref="name"  -->
+    <bean name="CSharp" class="spring.beans.xml.XMLSettingConfigGenerateService"
+          c:_lang="C#"
+          p:sayAfterLang="test"
+        >
+    </bean>
+    
+    <bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+        <constructor-arg value="C++" />
+        <constructor-arg><null/><constructor-arg/>
+        <property name="sayAfterLang" value="test" />
+    </bean>
+    
+</beans>

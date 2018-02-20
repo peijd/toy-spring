@@ -124,9 +124,130 @@ public class PythonGeneraterTest {
 #+END_SRC
 *** 通过XML装配bean
 **** 创建XML配置规范
-
+#+BEGIN_SRC xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <!-- more bean definitions go here -->
+</beans>
+#+END_SRC
 **** 声明一个bean
+#+BEGIN_SRC xml
+<bean class="spring.beans.xml.ClojureGenerateService"></bean>
+#+END_SRC
 **** 借助构造器注入初始化bean
+***** <constructor-arg>标签  
+****** 注入引用 
+#+BEGIN_SRC xml 
+ <bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+        ...
+        <constructor-arg ref="xmlConfig" />
+        ...
+</bean>
+#+END_SRC
+****** 注入String
+#+BEGIN_SRC xml
+<bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+      ...
+      <constructor-arg value="C++" />
+      ...
+</bean>
+#+END_SRC
+****** 注入集合 
+可以是Set或List
+******* List 
+#+BEGIN_SRC xml
+<bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+    <list>
+        <value>node 1</value>
+        <value>node 1</value>
+    </list>
+</bean>
+#+END_SRC
+******* Set 
+#+BEGIN_SRC xml
+<bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+    <set>
+        <ref bean="bean1" />
+        <ref bean="bean2" />
+    </sist>
+</bean>
+#+END_SRC
+
+****** 注入NULL 
+#+BEGIN_SRC xml
+ <bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+        ...
+        <constructor-arg><null/></constructor-arg>
+        ...
+</bean>
+#+END_SRC
+*****  c-命名空间
+具体详细的用法请参考一下：
+https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-c-namespace
+
+****** 注入引用 
+#+BEGIN_SRC xml
+<bean name="CSharp" class="spring.beans.xml.XMLSettingConfigGenerateService"
+      c:xmlConfig-ref="xmlConfig">
+</bean>
+
+<bean name="CSharp" class="spring.beans.xml.XMLSettingConfigGenerateService"
+      c:_0-ref="xmlConfig">
+</bean>
+
+#+END_SRC
+****** 注入String 
+#+BEGIN_SRC xml
+<bean name="CSharp" class="spring.beans.xml.XMLSettingConfigGenerateService"
+      c:lang="C#">
+</bean>
+#+END_SRC
 **** 设置属性
+*****  <property>标签
+****** 注入引用 
+#+BEGIN_SRC xml
+
+#+END_SRC
+****** 注入String 
+****** 注入集合 
+#+BEGIN_SRC xml
+<bean id="moreComplexObject" class="example.ComplexObject">
+    <!-- results in a setAdminEmails(java.util.Properties) call -->
+    <property name="adminEmails">
+        <props>
+            <prop key="administrator">administrator@example.org</prop>
+            <prop key="support">support@example.org</prop>
+            <prop key="development">development@example.org</prop>
+        </props>
+    </property>
+    <!-- results in a setSomeList(java.util.List) call -->
+    <property name="someList">
+        <list>
+            <value>a list element followed by a reference</value>
+            <ref bean="myDataSource" />
+        </list>
+    </property>
+    <!-- results in a setSomeMap(java.util.Map) call -->
+    <property name="someMap">
+        <map>
+            <entry key="an entry" value="just some string"/>
+            <entry key ="a ref" value-ref="myDataSource"/>
+        </map>
+    </property>
+    <!-- results in a setSomeSet(java.util.Set) call -->
+    <property name="someSet">
+        <set>
+            <value>just some string</value>
+            <ref bean="myDataSource" />
+        </set>
+    </property>
+</bean>
+
+#+END_SRC
+***** p-命名空间 
 *** 导入和混合配置
 **    
