@@ -210,9 +210,21 @@ https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#
 *****  <property>标签
 ****** 注入引用 
 #+BEGIN_SRC xml
-
+    <bean id="petStore" class="org.springframework.samples.jpetstore.services.PetStoreServiceImpl">
+        <property name="accountDao" ref="accountDao"/>
+        <property name="itemDao" ref="itemDao"/>
+    </bean>
 #+END_SRC
 ****** 注入String 
+#+BEGIN_SRC xml
+<bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <!-- results in a setDriverClassName(String) call -->
+    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    <property name="url" value="jdbc:mysql://localhost:3306/mydb"/>
+    <property name="username" value="root"/>
+    <property name="password" value="masterkaoli"/>
+</bean>
+#+END_SRC
 ****** 注入集合 
 #+BEGIN_SRC xml
 <bean id="moreComplexObject" class="example.ComplexObject">
@@ -249,5 +261,41 @@ https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#
 
 #+END_SRC
 ***** p-命名空间 
+****** 注入引用和String
+#+BEGIN_SRC xml
+<bean name="john-classic" class="com.example.Person">
+    <property name="name" value="John Doe"/>
+    <property name="spouse" ref="jane"/>
+</bean>
+
+<bean name="john-modern"
+        class="com.example.Person"
+        p:name="John Doe"
+        p:spouse-ref="jane"/>
+#+END_SRC
+**** 测试 
+
 *** 导入和混合配置
-**    
+**** 注解导入配置类和XML
+*****  导入配置类
+#+BEGIN_SRC java
+@Import(ConfigA.class)
+@Import({ServiceConfig.class, RepositoryConfig.class})
+#+END_SRC
+***** 导入XML
+#+BEGIN_SRC java
+@ImportResource("classpath:/com/acme/properties-config.xml")
+#+END_SRC
+**** 在XML配置中引用JavaConfig 
+***** 导入配置类 
+#+BEGIN_SRC xml
+<bean class="xyz.peijundong.bkz.config"/>
+#+END_SRC
+***** 导入XML
+#+BEGIN_SRC xml
+  <import resource="services.xml"/>
+  <import resource="resources/messageSource.xml"/>
+  <import resource="/resources/themeSource.xml"/>
+#+END_SRC
+
+*  
