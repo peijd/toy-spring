@@ -297,5 +297,3 @@ https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#
   <import resource="resources/messageSource.xml"/>
   <import resource="/resources/themeSource.xml"/>
 #+END_SRC
-
-*  
