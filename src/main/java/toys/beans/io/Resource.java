@@ -1,6 +1,7 @@
-package toys.beans.config;
+package toys.beans.io;
 
-import javax.jws.Oneway;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * (       "     )
@@ -20,21 +21,15 @@ import javax.jws.Oneway;
  * \    (. ) ,   /  /__I_____\
  * snd  '._/_)_(\__.'   (__,(__,_]
  * <o>
+ * |   愿你被这个世界温柔以待。
  * / \
  *
  * @author peijundong@gmail.com
- * Created by peijundong on 2018/1/24。
+ * Created by peijundong on 2018/1/25。
  * Description:
  * Copyright(©) 2018 by peijundong
  */
-public class BeanDefinition {
-    private Object bean;
+public interface Resource {
 
-    public BeanDefinition(Object bean) {
-        this.bean = bean;
-    }
-
-    public Object getBean(){
-        return  bean;
-    }
+    InputStream getInputStream() throws IOException;
 }

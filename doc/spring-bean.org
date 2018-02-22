@@ -1,0 +1,299 @@
+
+* Spring从入门到放弃:装配Bean
+
+
+本来想写一个玩具式Spring微小框架，一边读Spring源代码，一边写。但感觉有点乱。
+
+然后就打算先总结一下，然后再看再写。最后希望实现一个完整的微小的框架。
+
+如果有一天这个系列不更新了，可能是我真的放弃了。
+
+** Spring配置的可选方案
+   - 在XML中显示的配置
+   - 在Java中进行显示的配置
+   - 隐式的bean发现机制和自动装配
+
+*** 自动化装配bean
+    Spring从以下两个角度实现自动化装配：
+    - 组件扫描： Spring会自动发现应用上下中所创建的bean。
+    - 自动装配： Spring自动满足bean之间的依赖。
+**** 创建bean
+#+BEGIN_SRC java
+@Component
+public class JavaGenerateService implements GenerateService {
+    @Override
+    public String generateCode() {
+        return "Java code";
+    }
+} 
+#+END_SRC
+          
+**** 声明bean
+#+BEGIN_SRC java
+@Component("rubvGen")
+//@Named("rubyGen")
+public class RubyGenerateService implements GenerateService{
+    @Override
+    public String generateCode() {
+        return "Ruby code";
+    }
+}
+#+END_SRC
+
+**** 设置组件扫描
+#+BEGIN_SRC java
+// 指定包
+@ComponentScan(basePackages = {"spring.beans.autowiring"})
+// 指定类所在的包
+@ComponentScan(basePackageClasses = {GenerateConfig.class})
+#+END_SRC
+
+**** bean的自动装配
+#+BEGIN_SRC java
+// spring 自己的注解 
+@Autowired
+private GenerateService javaGenerateService;
+
+// Java的依赖注入规范
+@Inject
+private GenerateService haskellGenerateService;
+#+END_SRC
+**** 测试
+#+BEGIN_SRC 
+//在测试类的上面添加下面注解就可以了，会帮你加载Spring的配置，初始化容器
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = GenerateConfig.class)
+#+END_SRC
+*** 通过Java代码装配bean
+**** 创建配置类
+#+BEGIN_SRC java
+@Configuration
+public class JavaCongfig {
+
+。。。。
+
+}
+#+END_SRC
+**** 声明的bean
+#+BEGIN_SRC java
+    @Bean(name = "PythonGen")
+    public PythonGenerateService  pythonGenerateService(){
+        return  new PythonGenerateService();
+    }
+#+END_SRC
+
+**** 借住JavaConfig实现注入
+#+BEGIN_SRC java
+    //需要注意的是： 虽然调用的是pythonGenerateService，默认情况下，Spring是不会创建新的实例的。
+    @Bean(name = "PythonGenAdv")
+    public  PuthonGenerateAdvanceServcie puthonGenerateAdvanceServcie(){
+        return  new PuthonGenerateAdvanceServcie(pythonGenerateService());
+    }
+
+    @Bean(name = "PythonGenAdv2")
+    public  PuthonGenerateAdvanceServcie puthonGenerateAdvanceServcie2(PythonGenerateService pythonGenerateService){
+        return  new PuthonGenerateAdvanceServcie(pythonGenerateService);
+    }
+#+END_SRC
+
+**** 测试 
+#+BEGIN_SRC java
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes=JavaCongfig.class, loader=AnnotationConfigContextLoader.class)
+public class PythonGeneraterTest {
+
+    @Autowired
+    private PythonGenerateService  pythonGenerateService;
+
+    @Autowired
+    @Qualifier("PythonGenAdv")
+    private PuthonGenerateAdvanceServcie  pythonGenerateAdvanceService;
+
+    @Autowired
+    @Qualifier("PythonGenAdv2")
+    private PuthonGenerateAdvanceServcie  pythonGenerateAdvanceService2;
+
+    @Test
+    public void testGenerater(){
+        Assert.assertEquals("Python code",pythonGenerateService.generateCode());
+
+        Assert.assertEquals(pythonGenerateAdvanceService.getPythonGenerateService(),
+                pythonGenerateAdvanceService2.getPythonGenerateService());
+    }
+}
+#+END_SRC
+*** 通过XML装配bean
+**** 创建XML配置规范
+#+BEGIN_SRC xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <!-- more bean definitions go here -->
+</beans>
+#+END_SRC
+**** 声明一个bean
+#+BEGIN_SRC xml
+<bean class="spring.beans.xml.ClojureGenerateService"></bean>
+#+END_SRC
+**** 借助构造器注入初始化bean
+***** <constructor-arg>标签  
+****** 注入引用 
+#+BEGIN_SRC xml 
+ <bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+        ...
+        <constructor-arg ref="xmlConfig" />
+        ...
+</bean>
+#+END_SRC
+****** 注入String
+#+BEGIN_SRC xml
+<bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+      ...
+      <constructor-arg value="C++" />
+      ...
+</bean>
+#+END_SRC
+****** 注入集合 
+可以是Set或List
+******* List 
+#+BEGIN_SRC xml
+<bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+    <list>
+        <value>node 1</value>
+        <value>node 1</value>
+    </list>
+</bean>
+#+END_SRC
+******* Set 
+#+BEGIN_SRC xml
+<bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+    <set>
+        <ref bean="bean1" />
+        <ref bean="bean2" />
+    </sist>
+</bean>
+#+END_SRC
+
+****** 注入NULL 
+#+BEGIN_SRC xml
+ <bean name="CPlus" class="spring.beans.xml.XMLSettingConfigGenerateService">
+        ...
+        <constructor-arg><null/></constructor-arg>
+        ...
+</bean>
+#+END_SRC
+*****  c-命名空间
+具体详细的用法请参考一下：
+https://docs.spring.io/spring/docs/current/spring-framework-reference/core.html#beans-c-namespace
+
+****** 注入引用 
+#+BEGIN_SRC xml
+<bean name="CSharp" class="spring.beans.xml.XMLSettingConfigGenerateService"
+      c:xmlConfig-ref="xmlConfig">
+</bean>
+
+<bean name="CSharp" class="spring.beans.xml.XMLSettingConfigGenerateService"
+      c:_0-ref="xmlConfig">
+</bean>
+
+#+END_SRC
+****** 注入String 
+#+BEGIN_SRC xml
+<bean name="CSharp" class="spring.beans.xml.XMLSettingConfigGenerateService"
+      c:lang="C#">
+</bean>
+#+END_SRC
+**** 设置属性
+*****  <property>标签
+****** 注入引用 
+#+BEGIN_SRC xml
+    <bean id="petStore" class="org.springframework.samples.jpetstore.services.PetStoreServiceImpl">
+        <property name="accountDao" ref="accountDao"/>
+        <property name="itemDao" ref="itemDao"/>
+    </bean>
+#+END_SRC
+****** 注入String 
+#+BEGIN_SRC xml
+<bean id="myDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <!-- results in a setDriverClassName(String) call -->
+    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    <property name="url" value="jdbc:mysql://localhost:3306/mydb"/>
+    <property name="username" value="root"/>
+    <property name="password" value="masterkaoli"/>
+</bean>
+#+END_SRC
+****** 注入集合 
+#+BEGIN_SRC xml
+<bean id="moreComplexObject" class="example.ComplexObject">
+    <!-- results in a setAdminEmails(java.util.Properties) call -->
+    <property name="adminEmails">
+        <props>
+            <prop key="administrator">administrator@example.org</prop>
+            <prop key="support">support@example.org</prop>
+            <prop key="development">development@example.org</prop>
+        </props>
+    </property>
+    <!-- results in a setSomeList(java.util.List) call -->
+    <property name="someList">
+        <list>
+            <value>a list element followed by a reference</value>
+            <ref bean="myDataSource" />
+        </list>
+    </property>
+    <!-- results in a setSomeMap(java.util.Map) call -->
+    <property name="someMap">
+        <map>
+            <entry key="an entry" value="just some string"/>
+            <entry key ="a ref" value-ref="myDataSource"/>
+        </map>
+    </property>
+    <!-- results in a setSomeSet(java.util.Set) call -->
+    <property name="someSet">
+        <set>
+            <value>just some string</value>
+            <ref bean="myDataSource" />
+        </set>
+    </property>
+</bean>
+
+#+END_SRC
+***** p-命名空间 
+****** 注入引用和String
+#+BEGIN_SRC xml
+<bean name="john-classic" class="com.example.Person">
+    <property name="name" value="John Doe"/>
+    <property name="spouse" ref="jane"/>
+</bean>
+
+<bean name="john-modern"
+        class="com.example.Person"
+        p:name="John Doe"
+        p:spouse-ref="jane"/>
+#+END_SRC
+**** 测试 
+
+*** 导入和混合配置
+**** 注解导入配置类和XML
+*****  导入配置类
+#+BEGIN_SRC java
+@Import(ConfigA.class)
+@Import({ServiceConfig.class, RepositoryConfig.class})
+#+END_SRC
+***** 导入XML
+#+BEGIN_SRC java
+@ImportResource("classpath:/com/acme/properties-config.xml")
+#+END_SRC
+**** 在XML配置中引用JavaConfig 
+***** 导入配置类 
+#+BEGIN_SRC xml
+<bean class="xyz.peijundong.bkz.config"/>
+#+END_SRC
+***** 导入XML
+#+BEGIN_SRC xml
+  <import resource="services.xml"/>
+  <import resource="resources/messageSource.xml"/>
+  <import resource="/resources/themeSource.xml"/>
+#+END_SRC

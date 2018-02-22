@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans>
+    
+    <bean name="propertyBean" class="toys.beans.factory.config.PropertyTestBean">
+        <property name="propertyStr" value="water"></property>
+    </bean>
+    <bean name="testBean" class="toys.beans.factory.config.TestBean">
+        <property name="text" value="hello"></property>
+        <property name="testProperty" ref="propertyBean"></property>
+    </bean>
+
+</beans>

@@ -1,7 +1,8 @@
-package toys.beans.config;
+package spring.beans.autowiring;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
 /**
  * (       "     )
  * ( _  *
@@ -24,28 +25,13 @@ import static org.junit.Assert.*;
  * / \
  *
  * @author peijundong@gmail.com
- * Created by peijundong on 2018/1/24。
+ * Created by peijundong on 2018/2/7。
  * Description:
  * Copyright(©) 2018 by peijundong
  */
-public class BeanFactoryTest {
-
-    @Test
-    public  void testBeanFactory(){
-
-        BeanFactory beanFactory = new BeanFactory();
-
-        TestBean  testBean = new TestBean();
-
-        BeanDefinition  beanDefinition = new BeanDefinition(testBean);
-
-
-        beanFactory.registerBeanDefinition("testBean",  beanDefinition);
-
-        TestBean test = (TestBean) beanFactory.getBean("testBean");
-
-
-        assertEquals("hello", test.getHello());
-    }
+@Configuration
+@ComponentScan(basePackages = {"spring.beans.autowiring"})
+//@ComponentScan(basePackageClasses = {GenerateConfig.class})
+public class GenerateConfig {
 
 }

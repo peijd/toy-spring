@@ -1,4 +1,6 @@
-package toys.beans.config;
+package spring.beans.xml;
+
+import spring.beans.GenerateService;
 
 /**
  * (       "     )
@@ -22,13 +24,13 @@ package toys.beans.config;
  * / \
  *
  * @author peijundong@gmail.com
- * Created by peijundong on 2018/1/24。
+ * Created by peijundong on 2018/2/20。
  * Description:
  * Copyright(©) 2018 by peijundong
  */
-public class TestBean {
-    private  final static String HELLO = "hello";
-    public  String getHello(){
-        return  HELLO;
+public class ClojureGenerateService implements GenerateService{
+    @Override
+    public String generateCode() {
+        return "Clojure code";
     }
 }
